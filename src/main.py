@@ -23,7 +23,7 @@ def main():
     val_loader = DataLoader(val_data, batch_size=128)
     test_loader = DataLoader(test_data, batch_size=128)
 
-    epochs = 2
+    epochs = 30
     for epoch in range(1, epochs + 1):
         print(f"Epoch {epoch}/{epochs}")
         train_one_epoch(model, train_loader, optimizer, criterion, device)
