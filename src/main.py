@@ -4,6 +4,7 @@ import torch
 from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.nn import CrossEntropyLoss
+from torch.optim.lr_scheduler import StepLR
 
 from src.model import CifarCNN
 from src.dataset import get_datasets
@@ -16,6 +17,7 @@ def main():
 
     model = CifarCNN().to(device)
     optimizer = Adam(model.parameters(), lr=1e-3)
+    scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
     criterion = CrossEntropyLoss()
 
     train_data, val_data, test_data = get_datasets()
@@ -28,6 +30,7 @@ def main():
         print(f"Epoch {epoch}/{epochs}")
         train_one_epoch(model, train_loader, optimizer, criterion, device)
         evaluate(model, val_loader, criterion, device)
+        scheduler.step()
 
     # Optionally evaluate on test data after training
     # evaluate(model, test_loader, criterion, device)
