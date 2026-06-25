@@ -26,7 +26,8 @@ def main():
     test_loader = DataLoader(test_data, batch_size=128)
 
     epochs = 30
-    best_val_acc = 0.0
+    best_val_acc = 0.0'
+    os.makedirs("outputs", exist_ok=True)
     for epoch in range(1, epochs + 1):
         print(f"Epoch {epoch}/{epochs}")
         train_one_epoch(model, train_loader, optimizer, criterion, device)
