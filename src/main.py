@@ -26,10 +26,14 @@ def main():
     test_loader = DataLoader(test_data, batch_size=128)
 
     epochs = 30
+    best_val_acc = 0.0
     for epoch in range(1, epochs + 1):
         print(f"Epoch {epoch}/{epochs}")
         train_one_epoch(model, train_loader, optimizer, criterion, device)
-        evaluate(model, val_loader, criterion, device)
+        val_loss, val_acc = evaluate(model, val_loader, criterion, device)
+        if val_acc> best_val_acc:
+            best_val_acc = val_acc
+            torch.save(model.state_dict(), "outputs/best_model.pth")
         scheduler.step()
 
     # Optionally evaluate on test data after training

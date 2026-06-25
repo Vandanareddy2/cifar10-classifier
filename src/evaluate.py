@@ -19,3 +19,4 @@ def evaluate(model, val_loader, criterion, device):
     epoch_loss = running_loss / len(val_loader)
     accuracy = correct / len(val_loader.dataset) * 100
     print(f"Val Loss: {epoch_loss:.4f}, Accuracy: {accuracy:.2f}%")
+    return epoch_loss, accuracy
