@@ -1,22 +1,26 @@
-from torch.utils.data import random_split
-from torchvision import datasets
-from torchvision.transforms import ToTensor
+import torch
+from torch.utils.data import DataLoader, random_split, Subset
+from torchvision import datasets, transforms
 
 def get_datasets():
-    training_data = datasets.CIFAR10(
-        root="data",         # Directory where data is stored
-        train=True,          # Target the training split
-        download=True,       # Download from the internet if missing
-        transform=ToTensor() # Convert images to PyTorch Tensors
-    )
+    train_transform = transforms.Compose([
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomCrop(32, padding=4),
+        transforms.ToTensor()
+    ])
 
-    train_data, val_data = random_split(training_data, [45000, 5000])
+    eval_transform = transforms.Compose([
+        transforms.ToTensor()
+    ])
 
-    test_data = datasets.CIFAR10(
-        root="data",
-        train=False,
-        download=True,
-        transform=ToTensor()
-    )
+    # Load twice with different transforms
+    train_dataset = datasets.CIFAR10(root="data", train=True, download=True, transform=train_transform)
+    val_dataset = datasets.CIFAR10(root="data", train=True, download=True, transform=eval_transform)
+    test_data = datasets.CIFAR10(root="data", train=False, download=True, transform=eval_transform)
+
+    # Split using same indices so train/val don't overlap
+    indices = torch.randperm(50000)
+    train_data = Subset(train_dataset, indices[:45000])
+    val_data = Subset(val_dataset, indices[45000:])
 
     return train_data, val_data, test_data
