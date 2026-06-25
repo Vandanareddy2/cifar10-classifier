@@ -5,10 +5,10 @@ from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.nn import CrossEntropyLoss
 
-from model import CifarCNN
-from dataset import get_datasets
-from train import train_one_epoch
-from evaluate import evaluate
+from src.model import CifarCNN
+from src.dataset import get_datasets
+from src.train import train_one_epoch
+from src.evaluate import evaluate
 
 
 def main():
