@@ -30,7 +30,7 @@ def main():
     val_losses = []
     val_accs = []
 
-    epochs = 30
+    epochs = 50
     best_val_acc = 0.0
     os.makedirs("outputs", exist_ok=True)
     for epoch in range(1, epochs + 1):
