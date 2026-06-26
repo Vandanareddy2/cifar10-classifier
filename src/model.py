@@ -15,13 +15,16 @@ class CifarCNN(nn.Module):
         self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
         self.bn3 = nn.BatchNorm2d(128)
 
+        # Block 4: 4x4 → 2x2
+        self.conv4 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
+        self.bn4 = nn.BatchNorm2d(256)
+
         self.relu = nn.ReLU()
         self.pool = nn.MaxPool2d(2, 2)
         self.flatten = nn.Flatten()
-        # self.dropout = nn.Dropout(0.2)
 
-        # Final feature size = 128 * 4 * 4
-        self.fc = nn.Linear(128 * 4 * 4, 10)
+        # Final feature size = 256 * 2 * 2
+        self.fc = nn.Linear(256 * 2 * 2, 10)
 
     def forward(self, x):
         # Block 1
@@ -42,9 +45,14 @@ class CifarCNN(nn.Module):
         x = self.relu(x)
         x = self.pool(x)
 
+        # Block 4
+        x = self.conv4(x)
+        x = self.bn4(x)
+        x = self.relu(x)
+        x = self.pool(x)
+
         # Classifier
         x = self.flatten(x)
-        # x = self.dropout(x)
         x = self.fc(x)
 
         return x
