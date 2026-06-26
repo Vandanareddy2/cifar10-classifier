@@ -18,7 +18,7 @@ class CifarCNN(nn.Module):
         self.relu = nn.ReLU()
         self.pool = nn.MaxPool2d(2, 2)
         self.flatten = nn.Flatten()
-        self.dropout = nn.Dropout(0.5)
+        self.dropout = nn.Dropout(0.2)
 
         # Final feature size = 128 * 4 * 4
         self.fc = nn.Linear(128 * 4 * 4, 10)
