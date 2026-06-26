@@ -10,6 +10,7 @@ from src.model import CifarCNN
 from src.dataset import get_datasets
 from src.train import train_one_epoch
 from src.evaluate import evaluate
+from src.utils import plot_training_curves
 
 
 def main():
@@ -25,17 +26,26 @@ def main():
     val_loader = DataLoader(val_data, batch_size=128)
     test_loader = DataLoader(test_data, batch_size=128)
 
+    train_losses = []
+    val_losses = []
+    val_accs = []
+
     epochs = 30
     best_val_acc = 0.0
     os.makedirs("outputs", exist_ok=True)
     for epoch in range(1, epochs + 1):
         print(f"Epoch {epoch}/{epochs}")
-        train_one_epoch(model, train_loader, optimizer, criterion, device)
+        train_loss = train_one_epoch(model, train_loader, optimizer, criterion, device)
         val_loss, val_acc = evaluate(model, val_loader, criterion, device)
+        train_losses.append(train_loss)
+        val_losses.append(val_loss)
+        val_accs.append(val_acc)
         if val_acc> best_val_acc:
             best_val_acc = val_acc
             torch.save(model.state_dict(), "outputs/best_model.pth")
+            print(f"✓ Best model saved! Accuracy: {val_acc:.2f}%")
         scheduler.step()
+    plot_training_curves(train_losses, val_losses, val_accs)
 
     # Optionally evaluate on test data after training
     # evaluate(model, test_loader, criterion, device)

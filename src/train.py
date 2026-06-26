@@ -20,5 +20,6 @@ def train_one_epoch(model, train_loader, optimizer, criterion, device):
     epoch_loss = running_loss / len(train_loader)
 
     print(f"Loss: {epoch_loss:.4f}")
+    return epoch_loss
 
 
