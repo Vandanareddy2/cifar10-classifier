@@ -17,8 +17,8 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     model = CifarCNN().to(device)
-    optimizer = Adam(model.parameters(), lr=1e-3)
-    scheduler = StepLR(optimizer, step_size=10, gamma=0.1)
+    optimizer = Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
+    scheduler = StepLR(optimizer, step_size=15, gamma=0.5)
     criterion = CrossEntropyLoss()
 
     train_data, val_data, test_data = get_datasets()
@@ -30,7 +30,7 @@ def main():
     val_losses = []
     val_accs = []
 
-    epochs = 50
+    epochs = 60
     best_val_acc = 0.0
     os.makedirs("outputs", exist_ok=True)
     for epoch in range(1, epochs + 1):
