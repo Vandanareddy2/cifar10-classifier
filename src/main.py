@@ -15,7 +15,6 @@ from src.utils import plot_training_curves
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
     model = CifarCNN().to(device)
     optimizer = Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
     scheduler = StepLR(optimizer, step_size=15, gamma=0.5)
@@ -48,7 +47,9 @@ def main():
     plot_training_curves(train_losses, val_losses, val_accs)
 
     # Optionally evaluate on test data after training
-    # evaluate(model, test_loader, criterion, device)
+    model.load_state_dict(torch.load("outputs/best_model.pth"))
+    test_loss, test_acc = evaluate(model, test_loader, criterion, device)
+    print(f"Final Test Loss: {test_loss:.4f}, Test Accuracy: {test_acc:.2f}%")
 
 
 if __name__ == "__main__":
